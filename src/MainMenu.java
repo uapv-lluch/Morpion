@@ -4,41 +4,40 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class MainMenu extends Application {
+public class MainMenu {
+
+    private Scene scene;
 
     @FXML
     private Button playBtn;
     @FXML
     private Button quitBtn;
 
+    public void play(ActionEvent actionEvent) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("view/tictactoe.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) playBtn.getScene().getWindow();
+        stage.setScene(scene);
+    }
+
     @FXML
-    public void actionQuitBtn(ActionEvent event) {
+    public void quit(ActionEvent actionEvent) {
         Platform.exit();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("view/mainMenu.fxml"));
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-
-        /*quitBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println(event.getSource());
-            }
-        });*/
-
-        primaryStage.show();
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public void openScene(ActionEvent actionEvent) {
+        Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        primaryStage.setScene(scene);
     }
 }
