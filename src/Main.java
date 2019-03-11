@@ -14,24 +14,6 @@ public class Main extends Application {
 
     private Stage stage;
 
-    @FXML
-    private Button playBtn;
-    @FXML
-    private Button quitBtn;
-
-    @FXML
-    public void play(ActionEvent actionEvent) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("view/tictactoe.fxml"));
-        Scene scene = new Scene(root);
-        stage = (Stage) playBtn.getScene().getWindow();
-        stage.setScene(scene);
-    }
-
-    @FXML
-    public void quit(ActionEvent actionEvent) {
-        Platform.exit();
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -43,6 +25,7 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.setMinWidth(1280);
         stage.setMinHeight(720);
+        stage.setTitle("Tic Tac Toe");
         stage.show();
     }
 

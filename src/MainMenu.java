@@ -20,6 +20,7 @@ public class MainMenu {
     @FXML
     private Button quitBtn;
 
+    @FXML
     public void play(ActionEvent actionEvent) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("view/tictactoe.fxml"));
         Scene scene = new Scene(root);
