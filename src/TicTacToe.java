@@ -1,71 +1,96 @@
-import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.RadioButton;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
 
-public class TicTacToe extends Application {
+public class TicTacToe {
+
+    private ArrayList<Integer> stateOfTheGame;
+    private boolean isPvP;
+    private boolean isPlayer1Turn;
+    @FXML
+    private Parent root;
+    @FXML
+    private Button quitBtn;
+    @FXML
+    private GridPane ticTacToePane;
 
     @FXML
-    Button quitBtn;
+    public void mainMenu(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("view/mainMenu.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) this.root.getScene().getWindow();
+        stage.setScene(scene);
+    }
 
     @FXML
     public void quit(ActionEvent actionEvent) {
         Platform.exit();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("view/tictactoe.fxml"));
-        primaryStage.setTitle("Test");
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        Button topLeftBtn = (Button) scene.lookup("#topLeftBtn");
-        Button topButton = (Button) scene.lookup("#topButton");
-        Button topRightBtn = (Button) scene.lookup("#topRightBtn");
-        Button leftBtn = (Button) scene.lookup("#leftBtn");
-        Button middleBtn = (Button) scene.lookup("#middleBtn");
-        Button rightBtn = (Button) scene.lookup("#rightBtn");
-        Button bottomLeftBtn = (Button) scene.lookup("#bottomLeftBtn");
-        Button bottomBtn = (Button) scene.lookup("#bottomBtn");
-        Button bottomRightBtn = (Button) scene.lookup("#bottomRightBtn");
-
-        ArrayList<Button> buttons = new ArrayList<>();
-        buttons.add(topLeftBtn);
-        buttons.add(topButton);
-        buttons.add(topRightBtn);
-        buttons.add(leftBtn);
-        buttons.add(middleBtn);
-        buttons.add(rightBtn);
-        buttons.add(bottomLeftBtn);
-        buttons.add(bottomBtn);
-        buttons.add(bottomRightBtn);
-
-        for (Button button: buttons) {
-            button.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (button.getText().equals("O")) {
-                        button.setText("X");
-                    } else {
-                        button.setText("O");
-                    }
-                }
-            });
+    @FXML
+    public void onSquareClick(ActionEvent actionEvent) throws IOException {
+        Button button = (Button) actionEvent.getSource();
+        ObservableList observableList = ticTacToePane.getChildren();
+        if (isPvP) {
+            if (isPlayer1Turn) {
+                button.setText("X");
+                stateOfTheGame.set(observableList.indexOf(button), 1);
+            } else {
+                button.setText("O");
+                stateOfTheGame.set(observableList.indexOf(button), 2);
+            }
+            isPlayer1Turn = !isPlayer1Turn;
         }
-
-        primaryStage.show();
+        button.setMouseTransparent(true);
+        button.getParent().requestFocus();
+        if (isWin()) {
+            Parent root = FXMLLoader.load(getClass().getResource("view/gameOver.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) this.root.getScene().getWindow();
+            stage.setScene(scene);
+        }
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public boolean isWin() {
+        // Diagonals test
+        if (stateOfTheGame.get(0) != 0 && stateOfTheGame.get(0).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(0).equals(stateOfTheGame.get(8))) {
+            return true;
+        } else if (stateOfTheGame.get(2) != 0 && stateOfTheGame.get(2).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(2).equals(stateOfTheGame.get(6))) {
+            return true;
+        }
+        // Columns tests
+        for (int i = 0; i < 3; ++i) {
+            if (stateOfTheGame.get(i) != 0 && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 3)) && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 6))) {
+                return true;
+            }
+        }
+        // Rows test
+        for (int i = 0; i < 9; i += 3) {
+            if (stateOfTheGame.get(i) != 0 && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 1)) && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 2))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public TicTacToe() {
+        isPvP = true;
+        isPlayer1Turn = true;
+        stateOfTheGame = new ArrayList<>();
+        for (int i = 0; i < 9; ++i) {
+            stateOfTheGame.add(0);
+        }
     }
 }
