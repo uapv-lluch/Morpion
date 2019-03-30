@@ -34,10 +34,11 @@ public class MainMenu {
     @FXML
     public void play(ActionEvent actionEvent) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("view/tictactoe.fxml"));
-        Scene scene = new Scene(root);
+//        Scene scene = new Scene(root);
         RadioButton radioButton = (RadioButton) toggleGroup.getSelectedToggle();
         Stage stage = (Stage) this.root.getScene().getWindow();
-        stage.setScene(scene);
+        stage.getScene().setRoot(root);
+//        stage.setScene(scene);
     }
 
     @FXML

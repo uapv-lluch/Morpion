@@ -23,8 +23,8 @@ public class Main extends Application {
         MainMenu controller = loader.getController();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setMinWidth(1280);
-        stage.setMinHeight(720);
+//        stage.setResizable(false);
+        stage.setFullScreen(true);
         stage.setTitle("Tic Tac Toe");
         stage.show();
     }

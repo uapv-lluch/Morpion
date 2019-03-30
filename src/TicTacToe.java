@@ -29,9 +29,10 @@ public class TicTacToe {
     @FXML
     public void mainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("view/mainMenu.fxml"));
-        Scene scene = new Scene(root);
+//        Scene scene = new Scene(root);
         Stage stage = (Stage) this.root.getScene().getWindow();
-        stage.setScene(scene);
+        stage.getScene().setRoot(root);
+//        stage.setScene(scene);
     }
 
     @FXML
@@ -57,9 +58,10 @@ public class TicTacToe {
         button.getParent().requestFocus();
         if (isWin()) {
             Parent root = FXMLLoader.load(getClass().getResource("view/gameOver.fxml"));
-            Scene scene = new Scene(root);
+//            Scene scene = new Scene(root);
             Stage stage = (Stage) this.root.getScene().getWindow();
-            stage.setScene(scene);
+            stage.getScene().setRoot(root);
+//            stage.setScene(scene);
         }
     }
 

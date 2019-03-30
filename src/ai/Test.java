@@ -1,107 +1,70 @@
 package ai;
 
 //
+
 import java.util.HashMap;
 
 public class Test {
 
-	public static void main(String[] args) {
-		try {
-			test();
-		} 
-		catch (Exception e) {
-			System.out.println("Test.main()");
-			e.printStackTrace();
-			System.exit(-1);
-		}
-	}
+    public static void main(String[] args) {
+        try {
+            test();
+        } catch (Exception e) {
+            System.out.println("Test.main()");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
 
-	public static void test(){
-		try {
-			int[] layers = new int[]{ 2, 5, 1 };
-			
-			double error = 0.0 ;
-			MultiLayerPerceptron net = new MultiLayerPerceptron(layers, 0.1, new SigmoidalTransferFunction());
-			double samples = 1000000000 ;
+    public static void test() {
+        try {
+            int[] layers = new int[]{2, 5, 1};
 
-			//TRAINING ...
-			for(int i = 0; i < samples; i++){
-				double[] inputs = new double[]{Math.round(Math.random()), Math.round(Math.random())};
-				double[] output = new double[1];
+            double error = 0.0;
+            MultiLayerPerceptron net = new MultiLayerPerceptron(layers, 0.1, new SigmoidalTransferFunction());
+            double samples = 1000000000;
 
-				if((inputs[0] == 1.0) || (inputs[1] == 1.0))
-					output[0] = 1.0;
-				else
-					output[0] = 0.0;
+            train(net, 10000000, error);
 
-				
-				
-				error += net.backPropagate(inputs, output);
-
-				if ( i % 100000 == 0 ) System.out.println("Error at step "+i+" is "+ (error/(double)i));
-			}
-			error /= samples ;
-			System.out.println("Error is "+error);
-			//
-			System.out.println("Learning completed!");
-
-			//TEST ...
-			double[] inputs = new double[]{0.0, 1.0};
-			double[] output = net.forwardPropagation(inputs);
-
-			System.out.println(inputs[0]+" or "+inputs[1]+" = "+Math.round(output[0])+" ("+output[0]+")");
-		} 
-		catch (Exception e) {
-			System.out.println("Test.test()");
-			e.printStackTrace();
-			System.exit(-1);
-		}
-	}
-
-	public static void test2(){
-		try {
-			int[] layers = new int[]{ 2, 5, 1 };
-
-			double error = 0.0 ;
-			MultiLayerPerceptron net = new MultiLayerPerceptron(layers, 0.1, new SigmoidalTransferFunction());
-			double samples = 1000000000 ;
-
-			//TRAINING ...
-			for(int i = 0; i < samples; i++){
-				double[] inputs = new double[] {Math.random() * 3 + 1};
-				double[] output = new double[9];
-
-				if((inputs[0] == 1.0) || (inputs[1] == 1.0))
-					output[0] = 1.0;
-				else
-					output[0] = 0.0;
+            play(net);
+        } catch (Exception e) {
+            System.out.println("Test.test()");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
 
 
+    public static void train(MultiLayerPerceptron net, double samples, double error) {
+        //TRAINING ...
+        for (int i = 0; i < samples; i++) {
+            double[] inputs = new double[]{Math.round(Math.random()), Math.round(Math.random())};
+            double[] output = new double[1];
 
-				error += net.backPropagate(inputs, output);
+            if ((inputs[0] == 1.0) || (inputs[1] == 1.0))
+                output[0] = 1.0;
+            else
+                output[0] = 0.0;
 
-				if ( i % 100000 == 0 ) System.out.println("Error at step "+i+" is "+ (error/(double)i));
-			}
-			error /= samples ;
-			System.out.println("Error is "+error);
-			//
-			System.out.println("Learning completed!");
+            error += net.backPropagate(inputs, output);
 
-			//TEST ...
-			double[] inputs = new double[]{0.0, 1.0};
-			double[] output = net.forwardPropagation(inputs);
+            if (i % 100000 == 0) System.out.println("Error at step " + i + " is " + (error / (double) i));
+        }
+        error /= samples;
+        System.out.println("Error is " + error);
+        System.out.println("Learning completed!");
+    }
 
-			System.out.println(inputs[0]+" or "+inputs[1]+" = "+Math.round(output[0])+" ("+output[0]+")");
-		}
-		catch (Exception e) {
-			System.out.println("Test.test()");
-			e.printStackTrace();
-			System.exit(-1);
-		}
-	}
+    public static void play(MultiLayerPerceptron net) {
+        //TEST ...
+        double[] inputs = new double[]{0.0, 1.0};
+        double[] output = net.forwardPropagation(inputs);
 
-	//CHAMPS ...
-	public static HashMap<double[], double[]> mapTrain;
-	public static HashMap<double[], double[]> mapTest;
-	public static HashMap<double[], double[]> mapDev;
+        System.out.println(inputs[0] + " or " + inputs[1] + " = " + Math.round(output[0]) + " (" + output[0] + ")");
+    }
+
+    //CHAMPS ...
+    public static HashMap<double[], double[]> mapTrain;
+    public static HashMap<double[], double[]> mapTest;
+    public static HashMap<double[], double[]> mapDev;
 }

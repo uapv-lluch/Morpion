@@ -23,17 +23,19 @@ public class GameOver {
     @FXML
     public void restart(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("view/tictactoe.fxml"));
-        Scene scene = new Scene(root);
+//        Scene scene = new Scene(root);
         Stage stage = (Stage) this.root.getScene().getWindow();
-        stage.setScene(scene);
+        stage.getScene().setRoot(root);
+//        stage.setScene(scene);
     }
 
     @FXML
     public void mainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("view/mainMenu.fxml"));
-        Scene scene = new Scene(root);
+//        Scene scene = new Scene(root);
         Stage stage = (Stage) this.root.getScene().getWindow();
-        stage.setScene(scene);
+        stage.getScene().setRoot(root);
+//        stage.setScene(scene);
     }
 
     @FXML
