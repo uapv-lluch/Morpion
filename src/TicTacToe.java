@@ -16,16 +16,19 @@ import java.util.Observable;
 
 public class TicTacToe {
 
-    private ArrayList<Integer> stateOfTheGame;
+    private ArrayList<Double> stateOfTheGame;
     private boolean isPvP;
     private boolean isPlayer1Turn;
+    private String mode;
+    private String difficulty;
+
     @FXML
     private Parent root;
+
     @FXML
     private Button quitBtn;
     @FXML
     private GridPane ticTacToePane;
-
     @FXML
     public void mainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("view/mainMenu.fxml"));
@@ -41,16 +44,16 @@ public class TicTacToe {
     }
 
     @FXML
-    public void onSquareClick(ActionEvent actionEvent) throws IOException {
+    public void onBoxClick(ActionEvent actionEvent) throws IOException {
         Button button = (Button) actionEvent.getSource();
         ObservableList observableList = ticTacToePane.getChildren();
         if (isPvP) {
             if (isPlayer1Turn) {
                 button.setText("X");
-                stateOfTheGame.set(observableList.indexOf(button), 1);
+                stateOfTheGame.set(observableList.indexOf(button), States.CROSS);
             } else {
                 button.setText("O");
-                stateOfTheGame.set(observableList.indexOf(button), 2);
+                stateOfTheGame.set(observableList.indexOf(button), States.CIRCLE);
             }
             isPlayer1Turn = !isPlayer1Turn;
         }
@@ -65,22 +68,31 @@ public class TicTacToe {
         }
     }
 
+    public void setMode(String mode) {
+        this.mode = mode;
+        isPvP = mode.equals("vs Player");
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
     public boolean isWin() {
         // Diagonals test
-        if (stateOfTheGame.get(0) != 0 && stateOfTheGame.get(0).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(0).equals(stateOfTheGame.get(8))) {
+        if (stateOfTheGame.get(0) != States.EMPTY && stateOfTheGame.get(0).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(0).equals(stateOfTheGame.get(8))) {
             return true;
-        } else if (stateOfTheGame.get(2) != 0 && stateOfTheGame.get(2).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(2).equals(stateOfTheGame.get(6))) {
+        } else if (stateOfTheGame.get(2) != States.EMPTY && stateOfTheGame.get(2).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(2).equals(stateOfTheGame.get(6))) {
             return true;
         }
         // Columns tests
         for (int i = 0; i < 3; ++i) {
-            if (stateOfTheGame.get(i) != 0 && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 3)) && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 6))) {
+            if (stateOfTheGame.get(i) != States.EMPTY && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 3)) && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 6))) {
                 return true;
             }
         }
         // Rows test
         for (int i = 0; i < 9; i += 3) {
-            if (stateOfTheGame.get(i) != 0 && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 1)) && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 2))) {
+            if (stateOfTheGame.get(i) != States.EMPTY && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 1)) && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 2))) {
                 return true;
             }
         }
@@ -92,7 +104,7 @@ public class TicTacToe {
         isPlayer1Turn = true;
         stateOfTheGame = new ArrayList<>();
         for (int i = 0; i < 9; ++i) {
-            stateOfTheGame.add(0);
+            stateOfTheGame.add(States.EMPTY);
         }
     }
 }

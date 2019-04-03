@@ -3,7 +3,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
@@ -22,7 +21,7 @@ public class GameOver {
 
     @FXML
     public void restart(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("view/tictactoe.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/ticTacToe.fxml"));
 //        Scene scene = new Scene(root);
         Stage stage = (Stage) this.root.getScene().getWindow();
         stage.getScene().setRoot(root);

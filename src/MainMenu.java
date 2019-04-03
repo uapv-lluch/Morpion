@@ -1,17 +1,11 @@
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class MainMenu {
@@ -23,7 +17,9 @@ public class MainMenu {
     @FXML
     private Button quitBtn;
     @FXML
-    private ToggleGroup toggleGroup;
+    private ToggleGroup difficultyGroup;
+    @FXML
+    private ToggleGroup modeGroup;
     @FXML
     private RadioButton easyRadioBtn;
     @FXML
@@ -33,9 +29,14 @@ public class MainMenu {
 
     @FXML
     public void play(ActionEvent actionEvent) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("view/tictactoe.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/ticTacToe.fxml"));
+        Parent root = loader.load();
+        TicTacToe controller = loader.getController();
 //        Scene scene = new Scene(root);
-        RadioButton radioButton = (RadioButton) toggleGroup.getSelectedToggle();
+        RadioButton modeSelectedBtn = (RadioButton) modeGroup.getSelectedToggle();
+        RadioButton difficultySelectedBtn = (RadioButton) difficultyGroup.getSelectedToggle();
+        controller.setMode(modeSelectedBtn.getText());
+        controller.setDifficulty(difficultySelectedBtn.getText());
         Stage stage = (Stage) this.root.getScene().getWindow();
         stage.getScene().setRoot(root);
 //        stage.setScene(scene);

@@ -1,0 +1,52 @@
+.body-dark {
+    -fx-background-color: #303030;
+}
+
+.shadow {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 5, 0, 0, 5);
+}
+
+.rounded {
+    -fx-background-radius: 20;
+}
+
+.rounded-pill {
+    -fx-background-radius: 50000;
+}
+
+.btn-green {
+    -fx-text-fill: #fff;
+    -fx-background-color: #28a745;
+}
+
+.btn-green:hover {
+    -fx-background-color: #218838;
+}
+
+.btn-red {
+    -fx-text-fill: #fff;
+    -fx-background-color: #dc3545;
+}
+
+.btn-red:hover {
+    -fx-background-color: #c82333;
+}
+
+.btn-dark {
+    -fx-text-fill: #fff;
+    -fx-background-color: #343a40;
+}
+
+.btn-dark:hover {
+     -fx-background-color: #23272b;
+ }
+
+.grid-box {
+    -fx-text-fill: #fff;
+    -fx-background-color: #343a40;
+    -fx-border-color: #fff;
+}
+
+.grid-box:hover {
+    -fx-background-color: #23272b;
+}

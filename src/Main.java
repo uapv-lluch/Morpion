@@ -17,14 +17,14 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/mainMenu.fxml"));
         Parent root = loader.load();
         MainMenu controller = loader.getController();
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("view/css/style.css");
         stage.setScene(scene);
-//        stage.setResizable(false);
-        stage.setFullScreen(true);
+        stage.setResizable(false);
+//        stage.setFullScreen(true);
         stage.setTitle("Tic Tac Toe");
         stage.show();
     }
