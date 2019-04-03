@@ -2,6 +2,11 @@
     -fx-background-color: #303030;
 }
 
+.btn {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 5, 0, 0, 5);
+    -fx-background-radius: 20;
+}
+
 .shadow {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 5, 0, 0, 5);
 }

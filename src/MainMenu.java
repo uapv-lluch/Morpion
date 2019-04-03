@@ -32,14 +32,12 @@ public class MainMenu {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/ticTacToe.fxml"));
         Parent root = loader.load();
         TicTacToe controller = loader.getController();
-//        Scene scene = new Scene(root);
         RadioButton modeSelectedBtn = (RadioButton) modeGroup.getSelectedToggle();
         RadioButton difficultySelectedBtn = (RadioButton) difficultyGroup.getSelectedToggle();
         controller.setMode(modeSelectedBtn.getText());
         controller.setDifficulty(difficultySelectedBtn.getText());
         Stage stage = (Stage) this.root.getScene().getWindow();
         stage.getScene().setRoot(root);
-//        stage.setScene(scene);
     }
 
     @FXML

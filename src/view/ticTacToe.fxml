@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -7,6 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TicTacToe">
     <children>
@@ -68,8 +70,12 @@
                     </font>
                 </Button>
             </children>
+         <styleClass>
+            <String fx:value="shadow" />
+            <String fx:value="rounded" />
+         </styleClass>
         </GridPane>
-        <TitledPane layoutX="1016.0" layoutY="14.0" prefHeight="690.0" prefWidth="250.0" text="History">
+        <TitledPane layoutX="1016.0" layoutY="14.0" prefHeight="690.0" prefWidth="250.0" styleClass="shadow" text="History" visible="false">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
@@ -77,15 +83,28 @@
                 <Font name="Cooper Black" size="15.0" />
             </font>
         </TitledPane>
-        <Button fx:id="quitBtn" layoutX="133.0" layoutY="366.0" mnemonicParsing="false" onAction="#quit" styleClass="btn-red" text="Quit">
+        <Button fx:id="quitBtn" layoutX="133.0" layoutY="366.0" mnemonicParsing="false" onAction="#quit" text="Quit">
             <font>
                 <Font name="Cooper Black" size="24.0" />
             </font>
+         <styleClass>
+            <String fx:value="btn-red" />
+            <String fx:value="btn" />
+         </styleClass>
         </Button>
-        <Button layoutX="94.0" layoutY="277.0" mnemonicParsing="false" onAction="#mainMenu" styleClass="btn-dark" text="Main menu">
+        <Button layoutX="94.0" layoutY="277.0" mnemonicParsing="false" onAction="#mainMenu" text="Main menu">
             <font>
                 <Font name="Cooper Black" size="24.0" />
             </font>
+         <styleClass>
+            <String fx:value="btn-dark" />
+            <String fx:value="shadow" />
+            <String fx:value="rounded" />
+         </styleClass>
         </Button>
+      <Text layoutX="88.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer :" />
+      <Text fx:id="timerSeconds" layoutX="169.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00" textAlignment="RIGHT" />
+      <Text fx:id="timerMinutes" layoutX="149.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="RIGHT" />
+      <Text layoutX="158.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" : " />
     </children>
 </AnchorPane>

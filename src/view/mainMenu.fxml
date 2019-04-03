@@ -22,9 +22,8 @@
                 <Font size="36.0" />
             </font>
          <styleClass>
+            <String fx:value="btn" />
             <String fx:value="btn-dark" />
-            <String fx:value="shadow" />
-            <String fx:value="rounded-pill" />
          </styleClass>
         </Button>
         <Button layoutX="573.0" layoutY="376.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="135.0" text="Options">
@@ -32,9 +31,8 @@
                 <Font size="24.0" />
             </font>
          <styleClass>
+            <String fx:value="btn" />
             <String fx:value="btn-dark" />
-            <String fx:value="shadow" />
-            <String fx:value="rounded-pill" />
          </styleClass>
         </Button>
         <Button fx:id="quitBtn" layoutX="573.0" layoutY="480.0" mnemonicParsing="false" onAction="#quit" prefHeight="61.0" prefWidth="135.0" text="Quit" textFill="WHITE">
@@ -42,9 +40,8 @@
                 <Font size="24.0" />
             </font>
          <styleClass>
+            <String fx:value="btn" />
             <String fx:value="btn-red" />
-            <String fx:value="shadow" />
-            <String fx:value="rounded-pill" />
          </styleClass>
         </Button>
         <VBox alignment="CENTER" layoutX="617.0" layoutY="-107.0" prefHeight="180.0" prefWidth="213.0" spacing="50.0" AnchorPane.bottomAnchor="647.0" AnchorPane.leftAnchor="617.0" AnchorPane.rightAnchor="450.0" AnchorPane.topAnchor="-107.0">
@@ -63,7 +60,7 @@
             <ToggleGroup fx:id="modeGroup" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="mediumRadioBtn1" layoutX="788.0" layoutY="281.0" mnemonicParsing="false" text="vs Player" toggleGroup="$modeGroup" />
+      <RadioButton fx:id="mediumRadioBtn1" layoutX="788.0" layoutY="281.0" mnemonicParsing="false" selected="true" text="vs Player" toggleGroup="$modeGroup" />
       <Text layoutX="814.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mode" />
       <Text layoutX="937.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Difficulty" />
     </children>

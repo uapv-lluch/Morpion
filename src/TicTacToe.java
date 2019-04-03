@@ -1,41 +1,52 @@
+import ai.MultiLayerPerceptron;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Observable;
+import java.util.HashMap;
 
 public class TicTacToe {
 
-    private ArrayList<Double> stateOfTheGame;
+//    private ArrayList<Double> stateOfTheGame;
+    private double[] stateOfTheGame2 = new double[9];
     private boolean isPvP;
     private boolean isPlayer1Turn;
     private String mode;
     private String difficulty;
+    private MultiLayerPerceptron ai;
+    private String winner;
+    private HashMap<String, String> player1Map;
+    private HashMap<String, String> player2Map;
 
     @FXML
     private Parent root;
-
     @FXML
     private Button quitBtn;
     @FXML
     private GridPane ticTacToePane;
     @FXML
+    private Text timerMinutes;
+    @FXML
+    private Text timerSeconds;
+
+    @FXML
     public void mainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("view/mainMenu.fxml"));
-//        Scene scene = new Scene(root);
         Stage stage = (Stage) this.root.getScene().getWindow();
         stage.getScene().setRoot(root);
-//        stage.setScene(scene);
     }
 
     @FXML
@@ -50,21 +61,29 @@ public class TicTacToe {
         if (isPvP) {
             if (isPlayer1Turn) {
                 button.setText("X");
-                stateOfTheGame.set(observableList.indexOf(button), States.CROSS);
+//                stateOfTheGame.set(observableList.indexOf(button), States.CROSS);
+                stateOfTheGame2[observableList.indexOf(button)] = States.CROSS;
             } else {
                 button.setText("O");
-                stateOfTheGame.set(observableList.indexOf(button), States.CIRCLE);
+//                stateOfTheGame.set(observableList.indexOf(button), States.CIRCLE);
+                stateOfTheGame2[observableList.indexOf(button)] = States.CIRCLE;
             }
             isPlayer1Turn = !isPlayer1Turn;
+        } else {
+            button.setText("X");
+//            stateOfTheGame.set(observableList.indexOf(button), States.CROSS);
+            stateOfTheGame2[observableList.indexOf(button)] = States.CROSS;
+//            ai.forwardPropagation(stateOfTheGame2);
         }
         button.setMouseTransparent(true);
         button.getParent().requestFocus();
         if (isWin()) {
-            Parent root = FXMLLoader.load(getClass().getResource("view/gameOver.fxml"));
-//            Scene scene = new Scene(root);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/gameOver.fxml"));
+            Parent root = loader.load();
+            GameOver controller = loader.getController();
+            controller.setWinner(winner);
             Stage stage = (Stage) this.root.getScene().getWindow();
             stage.getScene().setRoot(root);
-//            stage.setScene(scene);
         }
     }
 
@@ -78,7 +97,7 @@ public class TicTacToe {
     }
 
     public boolean isWin() {
-        // Diagonals test
+        /*// Diagonals test
         if (stateOfTheGame.get(0) != States.EMPTY && stateOfTheGame.get(0).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(0).equals(stateOfTheGame.get(8))) {
             return true;
         } else if (stateOfTheGame.get(2) != States.EMPTY && stateOfTheGame.get(2).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(2).equals(stateOfTheGame.get(6))) {
@@ -96,15 +115,77 @@ public class TicTacToe {
                 return true;
             }
         }
+        return false;*/
+
+        // Diagonals test
+        if (stateOfTheGame2[0] != States.EMPTY && stateOfTheGame2[0] == stateOfTheGame2[4] && stateOfTheGame2[0] == stateOfTheGame2[8]) {
+            winner = stateOfTheGame2[0] == States.CROSS ? "Player 1" : "Player 2";
+            return true;
+        } else if (stateOfTheGame2[2] != States.EMPTY && stateOfTheGame2[2] == (stateOfTheGame2[4]) && stateOfTheGame2[2] == stateOfTheGame2[6]) {
+            winner = stateOfTheGame2[2] == States.CROSS ? "Player 1" : "Player 2";
+            return true;
+        }
+        // Columns tests
+        for (int i = 0; i < 3; ++i) {
+            if (stateOfTheGame2[i] != States.EMPTY && stateOfTheGame2[i] == stateOfTheGame2[i + 3] && stateOfTheGame2[i] == stateOfTheGame2[i + 6]) {
+                winner = stateOfTheGame2[i] == States.CROSS ? "Player 1" : "Player 2";
+                return true;
+            }
+        }
+        // Rows test
+        for (int i = 0; i < 9; i += 3) {
+            if (stateOfTheGame2[i] != States.EMPTY && stateOfTheGame2[i]  == stateOfTheGame2[i + 1] && stateOfTheGame2[i] == stateOfTheGame2[i + 2]) {
+                winner = stateOfTheGame2[i] == States.CROSS ? "Player 1" : "Player 2";
+                return true;
+            }
+        }
         return false;
     }
 
     public TicTacToe() {
         isPvP = true;
         isPlayer1Turn = true;
-        stateOfTheGame = new ArrayList<>();
-        for (int i = 0; i < 9; ++i) {
+//        stateOfTheGame = new ArrayList<>();
+        /*for (int i = 0; i < 9; ++i) {
             stateOfTheGame.add(States.EMPTY);
+        }*/
+        for (int i = 0; i < 9; ++i) {
+            stateOfTheGame2[i] = States.EMPTY;
         }
+
+        // AI
+        ai = MultiLayerPerceptron.load("saves/save1");
+
+
+        // Timer
+        Timeline timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        /*timeline.getKeyFrames().add(
+                new KeyFrame(Duration.minutes(1), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        int minutes = Integer.parseInt(timerMinutes.getText());
+                        ++minutes;
+                        timerMinutes.setText(Integer.toString(minutes));
+                    }
+                })
+        );*/
+        timeline.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        int seconds = Integer.parseInt(timerSeconds.getText());
+                        int minutes = Integer.parseInt(timerMinutes.getText());
+                        seconds = (seconds + 1) % 60;
+                        String secondsStr = seconds < 10 ? "0" + Integer.toString(seconds) : Integer.toString(seconds);
+                        if (seconds == 0) {
+                            ++minutes;
+                            timerMinutes.setText(Integer.toString(minutes));
+                        }
+                        timerSeconds.setText(secondsStr);
+                    }
+                })
+        );
+        timeline.playFromStart();
     }
 }
