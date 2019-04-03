@@ -49,6 +49,6 @@ public class GameOver {
 
     public void setWinner(String winner) {
         this.winner = winner;
-        winnerText.setText(winner + " is the winner");
+        winnerText.setText(winner + " has won");
     }
 }

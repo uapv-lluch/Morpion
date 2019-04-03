@@ -1,3 +1,4 @@
+import ai.Data;
 import ai.MultiLayerPerceptron;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,22 +15,25 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class TicTacToe {
 
 //    private ArrayList<Double> stateOfTheGame;
     private double[] stateOfTheGame2 = new double[9];
-    private boolean isPvP;
-    private boolean isPlayer1Turn;
+    private boolean isPvP = true;
+    private boolean isPlayer1Turn = true;
     private String mode;
     private String difficulty;
     private MultiLayerPerceptron ai;
     private String winner;
-    private HashMap<String, String> player1Map;
-    private HashMap<String, String> player2Map;
+    private HashMap<double[], double[]> player1Map = new HashMap<>();
+    private HashMap<double[], double[]> player2Map = new HashMap<>();
 
     @FXML
     private Parent root;
@@ -59,29 +63,41 @@ public class TicTacToe {
         Button button = (Button) actionEvent.getSource();
         ObservableList observableList = ticTacToePane.getChildren();
         if (isPvP) {
+            double[] oldStateOfTheGame = stateOfTheGame2.clone(); // probleme d'adresse memoire
             if (isPlayer1Turn) {
                 button.setText("X");
-//                stateOfTheGame.set(observableList.indexOf(button), States.CROSS);
                 stateOfTheGame2[observableList.indexOf(button)] = States.CROSS;
+                player1Map.put(oldStateOfTheGame, stateOfTheGame2);
             } else {
                 button.setText("O");
-//                stateOfTheGame.set(observableList.indexOf(button), States.CIRCLE);
                 stateOfTheGame2[observableList.indexOf(button)] = States.CIRCLE;
+                player2Map.put(oldStateOfTheGame, stateOfTheGame2);
             }
             isPlayer1Turn = !isPlayer1Turn;
         } else {
             button.setText("X");
-//            stateOfTheGame.set(observableList.indexOf(button), States.CROSS);
             stateOfTheGame2[observableList.indexOf(button)] = States.CROSS;
-//            ai.forwardPropagation(stateOfTheGame2);
         }
         button.setMouseTransparent(true);
         button.getParent().requestFocus();
         if (isWin()) {
+            if (winner.equals("Player 1")) {
+                Data.saveData(player1Map);
+            } else {
+                Data.saveData(player2Map);
+            }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/gameOver.fxml"));
             Parent root = loader.load();
             GameOver controller = loader.getController();
             controller.setWinner(winner);
+            Stage stage = (Stage) this.root.getScene().getWindow();
+            stage.getScene().setRoot(root);
+        } else if (Arrays.stream(stateOfTheGame2).noneMatch(i -> i == 0.0)) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/gameOver.fxml"));
+            Parent root = loader.load();
+            GameOver controller = loader.getController();
+
+            controller.setWinner("Nobody");
             Stage stage = (Stage) this.root.getScene().getWindow();
             stage.getScene().setRoot(root);
         }
@@ -143,8 +159,6 @@ public class TicTacToe {
     }
 
     public TicTacToe() {
-        isPvP = true;
-        isPlayer1Turn = true;
 //        stateOfTheGame = new ArrayList<>();
         /*for (int i = 0; i < 9; ++i) {
             stateOfTheGame.add(States.EMPTY);
