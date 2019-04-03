@@ -34,8 +34,7 @@ public class MainMenu {
         TicTacToe controller = loader.getController();
         RadioButton modeSelectedBtn = (RadioButton) modeGroup.getSelectedToggle();
         RadioButton difficultySelectedBtn = (RadioButton) difficultyGroup.getSelectedToggle();
-        controller.setMode(modeSelectedBtn.getText());
-        controller.setDifficulty(difficultySelectedBtn.getText());
+        controller.init(modeSelectedBtn.getText(), difficultySelectedBtn.getText());
         Stage stage = (Stage) this.root.getScene().getWindow();
         stage.getScene().setRoot(root);
     }

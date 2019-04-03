@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
@@ -21,48 +22,37 @@ public class AI {
     private double samples;
     private MultiLayerPerceptron net;
 
-    public AI(String name, double samples) {
+    public AI(String name) {
         this.name = name;
         this.samples = samples;
-        layers = new int[] {9, 5, 9};
-        net = MultiLayerPerceptron.load("saves/" + name);
+        layers = new int[]{9, 5, 9};
+        net = MultiLayerPerceptron.load("ai/" + name);
         if (net == null) {
             net = new MultiLayerPerceptron(layers, 0.1, new SigmoidalTransferFunction());
-            File file = new File("saves/data");
-            trainFromData(file, net, samples);
         }
     }
 
     public static void test() {
         try {
-            int[] layers = new int[]{9, 5, 9};
-
-            double error = 0.0;
-//            MultiLayerPerceptron net;
-//            double samples = 100000;
-
-            net = MultiLayerPerceptron.load("saves/aiSave");
-            if (net == null) {
-                net = new MultiLayerPerceptron(layers, 0.1, new SigmoidalTransferFunction());
-//                train(net, samples, error);
-                File file = new File("saves/data");
-                trainFromData(file, net, samples);
-            }
-
+//            AI ai = new AI("Easy");
+//            AI ai = new AI("Medium");
+            AI ai = new AI("Hard");
+            File file = new File("data/data");
+            ai.trainFromData(file, 1000000);
             double[] inputs = {
                     1, 0, 2,
                     1, 0, 0,
                     0, 0, 2
             };
-            play(net, inputs);
+            ai.play(inputs);
         } catch (Exception e) {
-            System.out.println("Test.test()");
+            System.out.println("AI.test()");
             e.printStackTrace();
             System.exit(-1);
         }
     }
 
-    public static void train(MultiLayerPerceptron net, double samples, double error) {
+    /*public static void train(MultiLayerPerceptron net, double samples, double error) {
         //TRAINING ...
         Random random = new Random();
         for (int i = 0; i < samples; i++) {
@@ -100,12 +90,12 @@ public class AI {
         System.out.println("Error is " + error);
         System.out.println("Learning completed!");
         net.save("saves/save1");
-    }
+    }*/
 
-    public static void trainFromData(File file, MultiLayerPerceptron net, double samples) {
+    public void trainFromData(File file, double samples) {
         try {
             if (file.exists()) {
-                HashMap<double[],double[]> data = new HashMap<>();
+                HashMap<double[], double[]> data = new HashMap<>();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
                 String line = "";
                 while ((line = bufferedReader.readLine()) != null) {
@@ -114,27 +104,58 @@ public class AI {
                     data.put(in, out);
                 }
                 for (int i = 0; i < samples; ++i) {
-                    for (double[] input: data.keySet()) {
+                    for (double[] input : data.keySet()) {
                         double[] output = data.get(input);
                         net.backPropagate(input, output);
                     }
                     System.out.println(i);
                 }
                 System.out.println("Learning complete");
-                net.save("saves/aiSave");
+                File directory = new File("ai");
+                if (!directory.exists()) {
+                    directory.mkdir();
+                }
+                net.save("ai/" + name);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void play(MultiLayerPerceptron net, double[] inputs) {
+    public int play(double[] inputs) {
         //TEST ...
         double[] outputs = net.forwardPropagation(inputs);
 
-        for (double d: outputs) {
+        for (double d : outputs) {
             System.out.println(d);
         }
+
+        if (Arrays.stream(outputs).max().isPresent()) {
+//            double max = Arrays.stream(outputs).max().getAsDouble();
+            double max = 0;
+            int indexMax = 0;
+            ArrayList<Integer> indexes = new ArrayList<>();
+            for (int i = 0; i < outputs.length; ++i) {
+                if (outputs[i] > max) {
+                    max = outputs[i];
+                    indexMax = i;
+                    indexes.add(i);
+                }
+            }
+            max = 0;
+            while (inputs[indexMax] != 0) {
+                for (int i = 0; i < outputs.length; ++i) {
+                    if (outputs[i] > max && !indexes.contains(i)) {
+                        max = outputs[i];
+                        indexMax = i;
+                        indexes.add(i);
+                    }
+                }
+                max = 0;
+            }
+            return indexMax;
+        }
+        return -1;
     }
 
     public static double[] getVector(String[] t) {
@@ -143,7 +164,7 @@ public class AI {
             for (int i = 0; i < vector.length; i++) {
                 vector[i] = new Double(t[i]);
             }
-            return vector ;
+            return vector;
         } catch (Exception e) {
             e.printStackTrace();
         }

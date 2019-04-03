@@ -1,3 +1,4 @@
+import ai.AI;
 import ai.Data;
 import ai.MultiLayerPerceptron;
 import javafx.animation.KeyFrame;
@@ -28,9 +29,9 @@ public class TicTacToe {
     private double[] stateOfTheGame2 = new double[9];
     private boolean isPvP = true;
     private boolean isPlayer1Turn = true;
-    private String mode;
-    private String difficulty;
-    private MultiLayerPerceptron ai;
+    private String mode = "vs Player";
+    private String difficulty = "Medium";
+    private AI ai;
     private String winner;
     private HashMap<double[], double[]> player1Map = new HashMap<>();
     private HashMap<double[], double[]> player2Map = new HashMap<>();
@@ -62,8 +63,8 @@ public class TicTacToe {
     public void onBoxClick(ActionEvent actionEvent) throws IOException {
         Button button = (Button) actionEvent.getSource();
         ObservableList observableList = ticTacToePane.getChildren();
-        if (isPvP) {
-            double[] oldStateOfTheGame = stateOfTheGame2.clone(); // probleme d'adresse memoire
+        double[] oldStateOfTheGame = stateOfTheGame2.clone(); // probleme d'adresse memoire
+        if (isPvP) { //PVP
             if (isPlayer1Turn) {
                 button.setText("X");
                 stateOfTheGame2[observableList.indexOf(button)] = States.CROSS;
@@ -74,32 +75,31 @@ public class TicTacToe {
                 player2Map.put(oldStateOfTheGame, stateOfTheGame2);
             }
             isPlayer1Turn = !isPlayer1Turn;
-        } else {
+        } else { // AI
             button.setText("X");
             stateOfTheGame2[observableList.indexOf(button)] = States.CROSS;
+            player1Map.put(oldStateOfTheGame, stateOfTheGame2);
+            oldStateOfTheGame = stateOfTheGame2.clone();
+            if (isWin()) {
+                gameOver(winner);
+            } else if (Arrays.stream(stateOfTheGame2).noneMatch(i -> i == 0.0)) {
+                gameOver("Nobody");
+            }
+            int index = ai.play(stateOfTheGame2);
+            System.out.println(index);
+            if (index != -1) {
+                Button box = (Button) observableList.get(index);
+                box.setText("O");
+                stateOfTheGame2[observableList.indexOf(button)] = States.CIRCLE;
+                player2Map.put(oldStateOfTheGame, stateOfTheGame2);
+            }
         }
         button.setMouseTransparent(true);
         button.getParent().requestFocus();
         if (isWin()) {
-            if (winner.equals("Player 1")) {
-                Data.saveData(player1Map);
-            } else {
-                Data.saveData(player2Map);
-            }
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/gameOver.fxml"));
-            Parent root = loader.load();
-            GameOver controller = loader.getController();
-            controller.setWinner(winner);
-            Stage stage = (Stage) this.root.getScene().getWindow();
-            stage.getScene().setRoot(root);
+            gameOver(winner);
         } else if (Arrays.stream(stateOfTheGame2).noneMatch(i -> i == 0.0)) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/gameOver.fxml"));
-            Parent root = loader.load();
-            GameOver controller = loader.getController();
-
-            controller.setWinner("Nobody");
-            Stage stage = (Stage) this.root.getScene().getWindow();
-            stage.getScene().setRoot(root);
+            gameOver("Nobody");
         }
     }
 
@@ -110,6 +110,15 @@ public class TicTacToe {
 
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public void init(String mode, String difficulty) {
+        this.mode = mode;
+        isPvP = mode.equals("vs Player");
+        if (!isPvP) {
+            this.difficulty = difficulty;
+            ai = new AI(difficulty);
+        }
     }
 
     public boolean isWin() {
@@ -135,27 +144,41 @@ public class TicTacToe {
 
         // Diagonals test
         if (stateOfTheGame2[0] != States.EMPTY && stateOfTheGame2[0] == stateOfTheGame2[4] && stateOfTheGame2[0] == stateOfTheGame2[8]) {
-            winner = stateOfTheGame2[0] == States.CROSS ? "Player 1" : "Player 2";
+            winner = stateOfTheGame2[0] == States.CROSS ? "Player 1" : (isPvP ? "Player 2" : "AI");
             return true;
         } else if (stateOfTheGame2[2] != States.EMPTY && stateOfTheGame2[2] == (stateOfTheGame2[4]) && stateOfTheGame2[2] == stateOfTheGame2[6]) {
-            winner = stateOfTheGame2[2] == States.CROSS ? "Player 1" : "Player 2";
+            winner = stateOfTheGame2[2] == States.CROSS ? "Player 1" : (isPvP ? "Player 2" : "AI");
             return true;
         }
         // Columns tests
         for (int i = 0; i < 3; ++i) {
             if (stateOfTheGame2[i] != States.EMPTY && stateOfTheGame2[i] == stateOfTheGame2[i + 3] && stateOfTheGame2[i] == stateOfTheGame2[i + 6]) {
-                winner = stateOfTheGame2[i] == States.CROSS ? "Player 1" : "Player 2";
+                winner = stateOfTheGame2[i] == States.CROSS ? "Player 1" : (isPvP ? "Player 2" : "AI");
                 return true;
             }
         }
         // Rows test
         for (int i = 0; i < 9; i += 3) {
             if (stateOfTheGame2[i] != States.EMPTY && stateOfTheGame2[i]  == stateOfTheGame2[i + 1] && stateOfTheGame2[i] == stateOfTheGame2[i + 2]) {
-                winner = stateOfTheGame2[i] == States.CROSS ? "Player 1" : "Player 2";
+                winner = stateOfTheGame2[i] == States.CROSS ? "Player 1" : (isPvP ? "Player 2" : "AI");
                 return true;
             }
         }
         return false;
+    }
+
+    public void gameOver(String winner) throws IOException {
+        if (winner.equals("Player 1")) {
+            Data.saveData(player1Map);
+        } else if (winner.equals("Player 2") || winner.equals("AI")) {
+            Data.saveData(player2Map);
+        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/gameOver.fxml"));
+        Parent root = loader.load();
+        GameOver controller = loader.getController();
+        controller.setWinner(winner);
+        Stage stage = (Stage) this.root.getScene().getWindow();
+        stage.getScene().setRoot(root);
     }
 
     public TicTacToe() {
@@ -166,10 +189,6 @@ public class TicTacToe {
         for (int i = 0; i < 9; ++i) {
             stateOfTheGame2[i] = States.EMPTY;
         }
-
-        // AI
-        ai = MultiLayerPerceptron.load("saves/save1");
-
 
         // Timer
         Timeline timeline = new Timeline();

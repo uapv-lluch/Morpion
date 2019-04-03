@@ -13,7 +13,11 @@ public class Data {
         String keyStr = null;
         String valueStr = null;
         try {
-            File file = new File("saves/data");
+            File directory = new File("data");
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            File file = new File("data/data");
             if (!file.exists()) {
                 file.createNewFile();
             }
