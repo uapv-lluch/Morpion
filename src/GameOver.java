@@ -12,6 +12,8 @@ import java.io.IOException;
 public class GameOver {
 
     private String winner = "";
+    private String mode = "";
+    private String difficulty = "";
 
     @FXML
     private Parent root;
@@ -26,7 +28,10 @@ public class GameOver {
 
     @FXML
     public void restart(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("view/ticTacToe.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/ticTacToe.fxml"));
+        Parent root = loader.load();
+        TicTacToe controller = loader.getController();
+        controller.init(mode, difficulty);
 //        Scene scene = new Scene(root);
         Stage stage = (Stage) this.root.getScene().getWindow();
         stage.getScene().setRoot(root);
@@ -50,5 +55,10 @@ public class GameOver {
     public void setWinner(String winner) {
         this.winner = winner;
         winnerText.setText(winner + " has won");
+    }
+
+    public void init(String mode, String difficulty) {
+        this.mode = mode;
+        this.difficulty = difficulty;
     }
 }

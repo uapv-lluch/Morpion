@@ -1,14 +1,13 @@
 package ai;
 
+import javafx.scene.control.ProgressBar;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 
 public class AI {
     //CHAMPS ...
@@ -34,17 +33,19 @@ public class AI {
 
     public static void test() {
         try {
-//            AI ai = new AI("Easy");
-//            AI ai = new AI("Medium");
-            AI ai = new AI("Hard");
+            AI aiEasy = new AI("Easy");
+            AI aiMedium = new AI("Medium");
+            AI aiHard = new AI("Hard");
             File file = new File("data/data");
-            ai.trainFromData(file, 1000000);
-            double[] inputs = {
+            aiEasy.trainFromData(file, 1000);
+            aiMedium.trainFromData(file, 10000);
+            aiHard.trainFromData(file, 100000);
+            /*double[] inputs = {
                     1, 0, 2,
                     1, 0, 0,
                     0, 0, 2
             };
-            ai.play(inputs);
+            aiHard.play(inputs);*/
         } catch (Exception e) {
             System.out.println("AI.test()");
             e.printStackTrace();
@@ -99,8 +100,8 @@ public class AI {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
                 String line = "";
                 while ((line = bufferedReader.readLine()) != null) {
-                    double[] in = getVector(line.split("\t")[0].split(","));
-                    double[] out = getVector(line.split("\t")[1].split(","));
+                    double[] in = getArray(line.split("\t")[0].split(","));
+                    double[] out = getArray(line.split("\t")[1].split(","));
                     data.put(in, out);
                 }
                 for (int i = 0; i < samples; ++i) {
@@ -109,6 +110,36 @@ public class AI {
                         net.backPropagate(input, output);
                     }
                     System.out.println(i);
+                }
+                System.out.println("Learning complete");
+                File directory = new File("ai");
+                if (!directory.exists()) {
+                    directory.mkdir();
+                }
+                net.save("ai/" + name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void trainFromDataWithProgressBar(File file, double samples, ProgressBar progressBar) {
+        try {
+            if (file.exists()) {
+                HashMap<double[], double[]> data = new HashMap<>();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null) {
+                    double[] in = getArray(line.split("\t")[0].split(","));
+                    double[] out = getArray(line.split("\t")[1].split(","));
+                    data.put(in, out);
+                }
+                for (double i = 0; i < samples; ++i) {
+                    for (double[] input : data.keySet()) {
+                        double[] output = data.get(input);
+                        net.backPropagate(input, output);
+                    }
+                    progressBar.setProgress(i/samples);
                 }
                 System.out.println("Learning complete");
                 File directory = new File("ai");
@@ -131,40 +162,26 @@ public class AI {
         }
 
         if (Arrays.stream(outputs).max().isPresent()) {
-//            double max = Arrays.stream(outputs).max().getAsDouble();
             double max = 0;
             int indexMax = 0;
-            ArrayList<Integer> indexes = new ArrayList<>();
             for (int i = 0; i < outputs.length; ++i) {
-                if (outputs[i] > max) {
+                if (inputs[i] == 0 && outputs[i] > max) {
                     max = outputs[i];
                     indexMax = i;
-                    indexes.add(i);
                 }
-            }
-            max = 0;
-            while (inputs[indexMax] != 0) {
-                for (int i = 0; i < outputs.length; ++i) {
-                    if (outputs[i] > max && !indexes.contains(i)) {
-                        max = outputs[i];
-                        indexMax = i;
-                        indexes.add(i);
-                    }
-                }
-                max = 0;
             }
             return indexMax;
         }
         return -1;
     }
 
-    public static double[] getVector(String[] t) {
+    public static double[] getArray(String[] t) {
         try {
-            double[] vector = new double[t.length];
-            for (int i = 0; i < vector.length; i++) {
-                vector[i] = new Double(t[i]);
+            double[] array = new double[t.length];
+            for (int i = 0; i < array.length; i++) {
+                array[i] = new Double(t[i]);
             }
-            return vector;
+            return array;
         } catch (Exception e) {
             e.printStackTrace();
         }

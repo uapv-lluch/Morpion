@@ -90,7 +90,8 @@ public class TicTacToe {
             if (index != -1) {
                 Button box = (Button) observableList.get(index);
                 box.setText("O");
-                stateOfTheGame2[observableList.indexOf(button)] = States.CIRCLE;
+                box.setMouseTransparent(true);
+                stateOfTheGame2[observableList.indexOf(box)] = States.CIRCLE;
                 player2Map.put(oldStateOfTheGame, stateOfTheGame2);
             }
         }
@@ -122,26 +123,6 @@ public class TicTacToe {
     }
 
     public boolean isWin() {
-        /*// Diagonals test
-        if (stateOfTheGame.get(0) != States.EMPTY && stateOfTheGame.get(0).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(0).equals(stateOfTheGame.get(8))) {
-            return true;
-        } else if (stateOfTheGame.get(2) != States.EMPTY && stateOfTheGame.get(2).equals(stateOfTheGame.get(4)) && stateOfTheGame.get(2).equals(stateOfTheGame.get(6))) {
-            return true;
-        }
-        // Columns tests
-        for (int i = 0; i < 3; ++i) {
-            if (stateOfTheGame.get(i) != States.EMPTY && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 3)) && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 6))) {
-                return true;
-            }
-        }
-        // Rows test
-        for (int i = 0; i < 9; i += 3) {
-            if (stateOfTheGame.get(i) != States.EMPTY && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 1)) && stateOfTheGame.get(i).equals(stateOfTheGame.get(i + 2))) {
-                return true;
-            }
-        }
-        return false;*/
-
         // Diagonals test
         if (stateOfTheGame2[0] != States.EMPTY && stateOfTheGame2[0] == stateOfTheGame2[4] && stateOfTheGame2[0] == stateOfTheGame2[8]) {
             winner = stateOfTheGame2[0] == States.CROSS ? "Player 1" : (isPvP ? "Player 2" : "AI");
@@ -177,6 +158,7 @@ public class TicTacToe {
         Parent root = loader.load();
         GameOver controller = loader.getController();
         controller.setWinner(winner);
+        controller.init(mode, difficulty);
         Stage stage = (Stage) this.root.getScene().getWindow();
         stage.getScene().setRoot(root);
     }

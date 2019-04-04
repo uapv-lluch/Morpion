@@ -26,7 +26,7 @@
             <String fx:value="btn-dark" />
          </styleClass>
         </Button>
-        <Button layoutX="573.0" layoutY="376.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="135.0" text="Options">
+        <Button layoutX="573.0" layoutY="376.0" mnemonicParsing="false" onAction="#options" prefHeight="61.0" prefWidth="135.0" text="Options">
             <font>
                 <Font size="24.0" />
             </font>
@@ -49,18 +49,18 @@
                 <Insets />
             </opaqueInsets>
         </VBox>
-        <RadioButton fx:id="easyRadioBtn" layoutX="920.0" layoutY="244.0" mnemonicParsing="false" text="Easy">
+        <RadioButton fx:id="easyRadioBtn" layoutX="920.0" layoutY="244.0" mnemonicParsing="false" text="Easy" visible="false">
          <toggleGroup>
             <ToggleGroup fx:id="difficultyGroup" />
          </toggleGroup></RadioButton>
-        <RadioButton fx:id="mediumRadioBtn" layoutX="920.0" layoutY="281.0" mnemonicParsing="false" selected="true" text="Medium" toggleGroup="$difficultyGroup" />
-        <RadioButton fx:id="hardRadioBtn" layoutX="920.0" layoutY="319.0" mnemonicParsing="false" text="Hard" toggleGroup="$difficultyGroup" />
-      <RadioButton fx:id="easyRadioBtn1" layoutX="788.0" layoutY="244.0" mnemonicParsing="false" selected="true" text="vs AI">
+        <RadioButton fx:id="mediumRadioBtn" layoutX="920.0" layoutY="281.0" mnemonicParsing="false" selected="true" text="Medium" toggleGroup="$difficultyGroup" visible="false" />
+        <RadioButton fx:id="hardRadioBtn" layoutX="920.0" layoutY="319.0" mnemonicParsing="false" text="Hard" toggleGroup="$difficultyGroup" visible="false" />
+      <RadioButton fx:id="easyRadioBtn1" layoutX="788.0" layoutY="244.0" mnemonicParsing="false" onAction="#showDifficulty" selected="true" text="vs AI">
          <toggleGroup>
             <ToggleGroup fx:id="modeGroup" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="mediumRadioBtn1" layoutX="788.0" layoutY="281.0" mnemonicParsing="false" selected="true" text="vs Player" toggleGroup="$modeGroup" />
+      <RadioButton fx:id="mediumRadioBtn1" layoutX="788.0" layoutY="281.0" mnemonicParsing="false" onAction="#hideDifficulty" selected="true" text="vs Player" toggleGroup="$modeGroup" />
       <Text layoutX="814.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mode" />
       <Text layoutX="937.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Difficulty" />
     </children>
