@@ -12,7 +12,7 @@
    <children>
       <Text layoutX="521.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over">
          <font>
-            <Font name="Cooper Black" size="48.0" />
+            <Font size="48.0" />
          </font>
       </Text>
       <TitledPane layoutX="426.0" layoutY="182.0" prefHeight="305.0" prefWidth="428.0" text="History" visible="false">
@@ -20,12 +20,12 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
         </content>
          <font>
-            <Font name="Cooper Black" size="15.0" />
+            <Font size="15.0" />
          </font>
       </TitledPane>
       <Button fx:id="restartBtn" layoutX="395.0" layoutY="463.0" mnemonicParsing="false" onAction="#restart" prefHeight="66.0" prefWidth="153.0" text="Restart">
          <font>
-            <Font name="Cooper Black" size="20.0" />
+            <Font size="20.0" />
          </font>
          <tooltip>
             <Tooltip text="Restart with the same parameters" />
@@ -37,7 +37,7 @@
       </Button>
       <Button fx:id="mainMenuBtn" layoutX="563.0" layoutY="463.0" mnemonicParsing="false" onAction="#mainMenu" prefHeight="66.0" prefWidth="153.0" text="Main Menu">
          <font>
-            <Font name="Cooper Black" size="20.0" />
+            <Font size="20.0" />
          </font>
          <styleClass>
             <String fx:value="btn" />
@@ -46,7 +46,7 @@
       </Button>
       <Button fx:id="quitBtn" layoutX="733.0" layoutY="463.0" mnemonicParsing="false" onAction="#quit" prefHeight="66.0" prefWidth="153.0" text="Quit">
          <font>
-            <Font name="Cooper Black" size="20.0" />
+            <Font size="20.0" />
          </font>
          <styleClass>
             <String fx:value="btn" />

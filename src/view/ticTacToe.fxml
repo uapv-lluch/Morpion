@@ -80,12 +80,12 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
             <font>
-                <Font name="Cooper Black" size="15.0" />
+                <Font size="15.0" />
             </font>
         </TitledPane>
         <Button fx:id="quitBtn" layoutX="1055.0" layoutY="374.0" mnemonicParsing="false" onAction="#quit" text="Quit">
             <font>
-                <Font name="Cooper Black" size="24.0" />
+                <Font size="24.0" />
             </font>
          <styleClass>
             <String fx:value="btn-red" />
@@ -94,12 +94,11 @@
         </Button>
         <Button layoutX="1018.0" layoutY="236.0" mnemonicParsing="false" onAction="#mainMenu" text="Main menu">
             <font>
-                <Font name="Cooper Black" size="24.0" />
+                <Font size="24.0" />
             </font>
          <styleClass>
+            <String fx:value="btn" />
             <String fx:value="btn-dark" />
-            <String fx:value="shadow" />
-            <String fx:value="rounded" />
          </styleClass>
         </Button>
       <Text layoutX="38.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer :">
@@ -118,5 +117,10 @@
          <font>
             <Font size="36.0" />
          </font></Text>
+      <Text fx:id="turnText" layoutX="17.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your turn" textAlignment="CENTER" wrappingWidth="342.0">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Text>
     </children>
 </AnchorPane>

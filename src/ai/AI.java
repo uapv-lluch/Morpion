@@ -1,5 +1,6 @@
 package ai;
 
+import javafx.concurrent.Task;
 import javafx.scene.control.ProgressBar;
 
 import java.io.BufferedReader;
@@ -95,61 +96,77 @@ public class AI {
 
     public void trainFromData(File file, double samples) {
         try {
-            if (file.exists()) {
-                HashMap<double[], double[]> data = new HashMap<>();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null) {
-                    double[] in = getArray(line.split("\t")[0].split(","));
-                    double[] out = getArray(line.split("\t")[1].split(","));
-                    data.put(in, out);
-                }
-                for (int i = 0; i < samples; ++i) {
-                    for (double[] input : data.keySet()) {
-                        double[] output = data.get(input);
-                        net.backPropagate(input, output);
+            Task task = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    if (file.exists()) {
+                        HashMap<double[], double[]> data = new HashMap<>();
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                        String line = "";
+                        while ((line = bufferedReader.readLine()) != null) {
+                            double[] in = getArray(line.split("\t")[0].split(","));
+                            double[] out = getArray(line.split("\t")[1].split(","));
+                            data.put(in, out);
+                        }
+                        for (int i = 0; i < samples; ++i) {
+                            for (double[] input : data.keySet()) {
+                                double[] output = data.get(input);
+                                net.backPropagate(input, output);
+                            }
+                            System.out.println(i);
+                        }
+                        System.out.println("Learning complete");
+                        File directory = new File("ai");
+                        if (!directory.exists()) {
+                            directory.mkdir();
+                        }
+                        net.save("ai/" + name);
                     }
-                    System.out.println(i);
+                    return null;
                 }
-                System.out.println("Learning complete");
-                File directory = new File("ai");
-                if (!directory.exists()) {
-                    directory.mkdir();
-                }
-                net.save("ai/" + name);
-            }
+            };
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void trainFromDataWithProgressBar(File file, double samples, ProgressBar progressBar) {
+    public Task trainFromDataWithProgressBar(File file, double samples, ProgressBar progressBar) {
         try {
-            if (file.exists()) {
-                HashMap<double[], double[]> data = new HashMap<>();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null) {
-                    double[] in = getArray(line.split("\t")[0].split(","));
-                    double[] out = getArray(line.split("\t")[1].split(","));
-                    data.put(in, out);
-                }
-                for (double i = 0; i < samples; ++i) {
-                    for (double[] input : data.keySet()) {
-                        double[] output = data.get(input);
-                        net.backPropagate(input, output);
+            Task task = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    if (file.exists()) {
+                        HashMap<double[], double[]> data = new HashMap<>();
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                        String line = "";
+                        while ((line = bufferedReader.readLine()) != null) {
+                            double[] in = getArray(line.split("\t")[0].split(","));
+                            double[] out = getArray(line.split("\t")[1].split(","));
+                            data.put(in, out);
+                        }
+                        for (double i = 0; i < samples; ++i) {
+                            for (double[] input : data.keySet()) {
+                                double[] output = data.get(input);
+                                net.backPropagate(input, output);
+                            }
+                            progressBar.setProgress(i/samples);
+                        }
+                        System.out.println("Learning complete");
+                        File directory = new File("ai");
+                        if (!directory.exists()) {
+                            directory.mkdir();
+                        }
+                        net.save("ai/" + name);
                     }
-                    progressBar.setProgress(i/samples);
+                    return null;
                 }
-                System.out.println("Learning complete");
-                File directory = new File("ai");
-                if (!directory.exists()) {
-                    directory.mkdir();
-                }
-                net.save("ai/" + name);
-            }
+            };
+            Thread thread = new Thread(task);
+            thread.start();
+            return task;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 

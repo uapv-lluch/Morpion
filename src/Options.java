@@ -1,5 +1,8 @@
 import ai.AI;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,24 +40,57 @@ public class Options {
     @FXML
     public void learnEasy(ActionEvent actionEvent) throws Exception {
         progressBar.setProgress(0);
+        easyLearnBtn.setDisable(true);
+        mediumLearnBtn.setDisable(true);
+        hardLearnBtn.setDisable(true);
         AI ai = new AI("Easy");
         File file = new File("data/data");
-        ai.trainFromDataWithProgressBar(file, 1000, progressBar);
+        Task task = ai.trainFromDataWithProgressBar(file, 1000, progressBar);
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                easyLearnBtn.setDisable(false);
+                mediumLearnBtn.setDisable(false);
+                hardLearnBtn.setDisable(false);
+            }
+        });
     }
 
     @FXML
     public void learnMedium(ActionEvent actionEvent) throws Exception {
         progressBar.setProgress(0);
+        easyLearnBtn.setDisable(true);
+        mediumLearnBtn.setDisable(true);
+        hardLearnBtn.setDisable(true);
         AI ai = new AI("Medium");
         File file = new File("data/data");
-        ai.trainFromDataWithProgressBar(file, 10000, progressBar);
+        Task task = ai.trainFromDataWithProgressBar(file, 10000, progressBar);
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                easyLearnBtn.setDisable(false);
+                mediumLearnBtn.setDisable(false);
+                hardLearnBtn.setDisable(false);
+            }
+        });
     }
 
     @FXML
     public void learnHard(ActionEvent actionEvent) throws Exception {
         progressBar.setProgress(0);
+        easyLearnBtn.setDisable(true);
+        mediumLearnBtn.setDisable(true);
+        hardLearnBtn.setDisable(true);
         AI ai = new AI("Hard");
         File file = new File("data/data");
-        ai.trainFromDataWithProgressBar(file, 100000, progressBar);
+        Task task = ai.trainFromDataWithProgressBar(file, 100000, progressBar);
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                easyLearnBtn.setDisable(false);
+                mediumLearnBtn.setDisable(false);
+                hardLearnBtn.setDisable(false);
+            }
+        });
     }
 }

@@ -46,6 +46,8 @@ public class TicTacToe {
     private Text timerMinutes;
     @FXML
     private Text timerSeconds;
+    @FXML
+    private Text turnText;
 
     @FXML
     public void mainMenu(ActionEvent actionEvent) throws IOException {
@@ -69,10 +71,12 @@ public class TicTacToe {
                 button.setText("X");
                 stateOfTheGame2[observableList.indexOf(button)] = States.CROSS;
                 player1Map.put(oldStateOfTheGame, stateOfTheGame2);
+                turnText.setText("Player 2 turn O");
             } else {
                 button.setText("O");
                 stateOfTheGame2[observableList.indexOf(button)] = States.CIRCLE;
                 player2Map.put(oldStateOfTheGame, stateOfTheGame2);
+                turnText.setText("Player 1 turn X");
             }
             isPlayer1Turn = !isPlayer1Turn;
         } else { // AI
@@ -119,6 +123,8 @@ public class TicTacToe {
         if (!isPvP) {
             this.difficulty = difficulty;
             ai = new AI(difficulty);
+        } else {
+            turnText.setText("Player 1 turn X");
         }
     }
 

@@ -49,12 +49,12 @@
                 <Insets />
             </opaqueInsets>
         </VBox>
-        <RadioButton fx:id="easyRadioBtn" layoutX="920.0" layoutY="244.0" mnemonicParsing="false" text="Easy" visible="false">
+        <RadioButton fx:id="easyRadioBtn" layoutX="920.0" layoutY="244.0" mnemonicParsing="false" opacity="0.0" text="Easy">
          <toggleGroup>
             <ToggleGroup fx:id="difficultyGroup" />
          </toggleGroup></RadioButton>
-        <RadioButton fx:id="mediumRadioBtn" layoutX="920.0" layoutY="281.0" mnemonicParsing="false" selected="true" text="Medium" toggleGroup="$difficultyGroup" visible="false" />
-        <RadioButton fx:id="hardRadioBtn" layoutX="920.0" layoutY="319.0" mnemonicParsing="false" text="Hard" toggleGroup="$difficultyGroup" visible="false" />
+        <RadioButton fx:id="mediumRadioBtn" layoutX="920.0" layoutY="281.0" mnemonicParsing="false" opacity="0.0" selected="true" text="Medium" toggleGroup="$difficultyGroup" />
+        <RadioButton fx:id="hardRadioBtn" layoutX="920.0" layoutY="319.0" mnemonicParsing="false" opacity="0.0" text="Hard" toggleGroup="$difficultyGroup" />
       <RadioButton fx:id="easyRadioBtn1" layoutX="788.0" layoutY="244.0" mnemonicParsing="false" onAction="#showDifficulty" selected="true" text="vs AI">
          <toggleGroup>
             <ToggleGroup fx:id="modeGroup" />
@@ -62,6 +62,6 @@
       </RadioButton>
       <RadioButton fx:id="mediumRadioBtn1" layoutX="788.0" layoutY="281.0" mnemonicParsing="false" onAction="#hideDifficulty" selected="true" text="vs Player" toggleGroup="$modeGroup" />
       <Text layoutX="814.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mode" />
-      <Text layoutX="937.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Difficulty" />
+      <Text fx:id="difficultyText" layoutX="937.0" layoutY="227.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Difficulty" />
     </children>
 </AnchorPane>
