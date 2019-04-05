@@ -41,58 +41,12 @@ public class AI {
             aiEasy.trainFromData(file, 1000);
             aiMedium.trainFromData(file, 10000);
             aiHard.trainFromData(file, 100000);
-            /*double[] inputs = {
-                    1, 0, 2,
-                    1, 0, 0,
-                    0, 0, 2
-            };
-            aiHard.play(inputs);*/
         } catch (Exception e) {
             System.out.println("AI.test()");
             e.printStackTrace();
             System.exit(-1);
         }
     }
-
-    /*public static void train(MultiLayerPerceptron net, double samples, double error) {
-        //TRAINING ...
-        Random random = new Random();
-        for (int i = 0; i < samples; i++) {
-            double[] inputs = new double[] {
-                random.nextInt(3),
-                random.nextInt(3),
-                random.nextInt(3),
-                random.nextInt(3),
-                random.nextInt(3),
-                random.nextInt(3),
-                random.nextInt(3),
-                random.nextInt(3),
-                random.nextInt(3)
-            };
-            double[] output = new double[9];
-            double[] temp = Arrays.stream(inputs).filter(item -> item == 0.0).toArray();
-            int choice = random.nextInt(9);
-            if (temp.length == 0) {
-                choice = -1;
-            } else {
-                while (inputs[choice] != 0) {
-                    choice = random.nextInt(9);
-                }
-            }
-            output[0] = choice;
-
-            error += net.backPropagate(inputs, output);
-
-            if (i % 100000 == 0) {
-                System.out.println("Error at step " + i + " is " + (error / (double) i));
-                System.out.println(choice);
-            }
-        }
-        error /= samples;
-        System.out.println("Error is " + error);
-        System.out.println("Learning completed!");
-        net.save("saves/save1");
-    }*/
 
     public void trainFromData(File file, double samples) {
         try {
@@ -104,8 +58,8 @@ public class AI {
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
                         String line = "";
                         while ((line = bufferedReader.readLine()) != null) {
-                            double[] in = getArray(line.split("\t")[0].split(","));
-                            double[] out = getArray(line.split("\t")[1].split(","));
+                            double[] in = toDoubleArray(line.split("\t")[0].split(","));
+                            double[] out = toDoubleArray(line.split("\t")[1].split(","));
                             data.put(in, out);
                         }
                         for (int i = 0; i < samples; ++i) {
@@ -140,8 +94,8 @@ public class AI {
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
                         String line = "";
                         while ((line = bufferedReader.readLine()) != null) {
-                            double[] in = getArray(line.split("\t")[0].split(","));
-                            double[] out = getArray(line.split("\t")[1].split(","));
+                            double[] in = toDoubleArray(line.split("\t")[0].split(","));
+                            double[] out = toDoubleArray(line.split("\t")[1].split(","));
                             data.put(in, out);
                         }
                         for (double i = 0; i < samples; ++i) {
@@ -192,17 +146,13 @@ public class AI {
         return -1;
     }
 
-    public static double[] getArray(String[] t) {
-        try {
-            double[] array = new double[t.length];
-            for (int i = 0; i < array.length; i++) {
-                array[i] = new Double(t[i]);
-            }
-            return array;
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static double[] toDoubleArray(String[] strArr) {
+
+        double[] doubleArray = new double[strArr.length];
+        for (int i = 0; i < doubleArray.length; ++i) {
+            doubleArray[i] = Double.parseDouble(strArr[i]);
         }
-        return null;
+        return doubleArray;
     }
 
     public static void main(String[] args) {
